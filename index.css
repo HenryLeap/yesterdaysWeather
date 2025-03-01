@@ -1,1 +1,6 @@
-
+.graph {
+    width: 70%;
+    max-width: 70%;
+    height: 28vh;
+    max-height: 28vh;
+}
