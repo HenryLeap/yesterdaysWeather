@@ -1,5 +1,15 @@
+var globalNotCookies = {};
+
 function getCookies() {
-    const cookie = JSON.parse(document.cookie)
+    let cookie = {};
+    try {
+        cookie = JSON.parse(document.cookie);
+    }
+    catch {}
+    cookie.allowed ??= false;
+
+    cookie = {...(cookie.allowed ? cookie : globalNotCookies)};
+
     cookie.metric ??= false;
     cookie.days ??= 1;
     cookie.temp ??= true;
@@ -14,15 +24,21 @@ function getCookies() {
 }
 
 function updateState(cookie) {
-    document.cookie = JSON.stringify(cookie);
+    (cookie.allowed ? document.cookie  = JSON.stringify(cookie): globalNotCookies = {...cookie});
     document.getElementById("units").innerText = cookie.metric ? "US Standard" : "Metric";
     cookie.days === 1 ? document.getElementById("1-day").setAttribute("disabled", "") : document.getElementById("1-day").removeAttribute("disabled");
     cookie.days === 3 ? document.getElementById("3-day").setAttribute("disabled", "") : document.getElementById("3-day").removeAttribute("disabled");
     cookie.days === 7 ? document.getElementById("7-day").setAttribute("disabled", "") : document.getElementById("7-day").removeAttribute("disabled");
 }
 
+function askCookies(cookies) {
+    cookies.allowed = confirm("Allow cookies?");
+}
+
 function pageLoad() {
-    updateState(getCookies());
+    const cookies = getCookies();
+    if (!cookies.allowed) askCookies(cookies);
+    updateState(cookies);
 }
 
 function changeUnits() {
