@@ -1,1 +1,41 @@
-
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="./index.js"></script>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>Toggles</td>
+                <td>
+                    <button id="1-day" onclick="changeDays(1)">1 Day</button>
+                    <button id="3-day" onclick="changeDays(3)">3 Days</button>
+                    <button id="7-day" onclick="changeDays(7)">7 Days</button>
+                    <button id="units" onclick="changeUnits()">Metric</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button>Temperature</button><br>
+                    <button>Feels Like</button><br>
+                    <button>Windspeed</button><br>
+                    <button>Percipitation</button><br> 
+                    <button>Humidity</button><br>
+                    <button>Dew Point</button><br>
+                    <button>Pressure</button><br>
+                    <button>Sun Times</button><br>
+                    <button>Moon Times</button>
+                </td>
+                <td>
+                    <div>Warnings</div>
+                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0f/Weath_undergr_logo14.png">
+                    <div>Graph: Temp, Feels like, Dew Point</div>
+                    <div>Graph: Windspeed, Percipitation</div>
+                    <div>Graph: Humidity, Pressure</div>
+                    <div>Symbols: Sun/Moon Times</div>
+                </td>
+            </tr>
+        </table>
+        <script>pageLoad();</script>
+    </body>
+</html>
