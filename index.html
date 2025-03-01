@@ -11,20 +11,20 @@
                     <button id="1-day" onclick="changeDays(1)">1 Day</button>
                     <button id="3-day" onclick="changeDays(3)">3 Days</button>
                     <button id="7-day" onclick="changeDays(7)">7 Days</button>
-                    <button id="units" onclick="changeUnits()">Metric</button>
+                    <button id="units" onclick="toggle('metric')">Metric</button>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <button>Temperature</button><br>
-                    <button>Feels Like</button><br>
-                    <button>Windspeed</button><br>
-                    <button>Percipitation</button><br> 
-                    <button>Humidity</button><br>
-                    <button>Dew Point</button><br>
-                    <button>Pressure</button><br>
-                    <button>Sun Times</button><br>
-                    <button>Moon Times</button>
+                    <button onclick="toggle('temp')">Temperature</button><br>
+                    <button onclick="toggle('feel')">Feels Like</button><br>
+                    <button onclick="toggle('wind')">Windspeed</button><br>
+                    <button onclick="toggle('percip')">Percipitation</button><br> 
+                    <button onclick="toggle('humid')">Humidity</button><br>
+                    <button onclick="toggle('dewpt')">Dew Point</button><br>
+                    <button onclick="toggle('press')">Pressure</button><br>
+                    <button onclick="toggle('sun')">Sun Times</button><br>
+                    <button onclick="toggle('moon')">Moon Times</button>
                 </td>
                 <td>
                     <div>Warnings</div>

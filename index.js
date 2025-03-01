@@ -18,6 +18,7 @@ function getCookies() {
     cookie.precip ??= true;
     cookie.humid ??= false;
     cookie.dewpt ??= false;
+    cookie.press ??= false;
     cookie.sun ??= true;
     cookie.moon ??= false;
     return cookie;
@@ -41,14 +42,20 @@ function pageLoad() {
     updateState(cookies);
 }
 
-function changeUnits() {
-    const cookie = getCookies();
-    cookie.metric = !cookie.metric;
-    updateState(cookie);
-}
+// function changeUnits() {
+//     const cookie = getCookies();
+//     cookie.metric = !cookie.metric;
+//     updateState(cookie);
+// }
 
 function changeDays(count) {
     const cookie = getCookies();
     cookie.days = count;
+    updateState(cookie);
+}
+
+function toggle(what) {
+    const cookie = getCookies();
+    cookie.hasOwnProperty(what) && (cookie[what] = !cookie[what]);
     updateState(cookie);
 }
