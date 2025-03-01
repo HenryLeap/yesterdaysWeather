@@ -64,15 +64,16 @@ function myGraph() {
     return graph(
         [50,60,70,80,90,100,110,120,130,140,150],
         [7,8,8,9,9,9,10,11,14,14,15],
-        "temp-graph", "#d5202a"
+        "temp-graph", "test", "#d5202a"
     )
 }
 
-function graph(xs, ys, name, colour) {
-    return new Chart(name, {
+function graph(xs, ys, chartName, seriesName, colour) {
+    return new Chart(chartName, {
         type: "scatter",
         data: {
             datasets: [{
+                label: seriesName,
                 fill: false,
                 lineTension: .3,
                 showLine: true,
@@ -82,7 +83,7 @@ function graph(xs, ys, name, colour) {
             }]
         },
         options: {
-            legend: {display: false},
+            legend: {position: "bottom"},
             scales: {
                 yAxes: [{ticks: {min: 6, max: 16}}],
                 xAxes: [{ticks: {min: 50, max: 150}}]
