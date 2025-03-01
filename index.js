@@ -59,3 +59,34 @@ function toggle(what) {
     cookie.hasOwnProperty(what) && (cookie[what] = !cookie[what]);
     updateState(cookie);
 }
+
+function myGraph() {
+    return graph(
+        [50,60,70,80,90,100,110,120,130,140,150],
+        [7,8,8,9,9,9,10,11,14,14,15],
+        "temp-graph", "#d5202a"
+    )
+}
+
+function graph(xs, ys, name, colour) {
+    return new Chart(name, {
+        type: "scatter",
+        data: {
+            datasets: [{
+                fill: false,
+                lineTension: .3,
+                showLine: true,
+                pointRadius: 0,
+                borderColor: colour,
+                data: xs.map((v, i) => ({x:v, y:ys[i]}))
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 6, max: 16}}],
+                xAxes: [{ticks: {min: 50, max: 150}}]
+            }
+        }
+    });      
+}

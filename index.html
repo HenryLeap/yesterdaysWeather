@@ -2,6 +2,8 @@
 <html>
     <head>
         <script type="text/javascript" src="./index.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <link rel="stylesheet" href="./index.css">
     </head>
     <body>
         <table>
@@ -28,11 +30,19 @@
                 </td>
                 <td>
                     <div>Warnings</div>
-                    <img src="https://upload.wikimedia.org/wikipedia/en/0/0f/Weath_undergr_logo14.png">
-                    <div>Graph: Temp, Feels like, Dew Point</div>
-                    <div>Graph: Windspeed, Percipitation</div>
-                    <div>Graph: Humidity, Pressure</div>
-                    <div>Symbols: Sun/Moon Times</div>
+                    <!-- <img src="https://upload.wikimedia.org/wikipedia/en/0/0f/Weath_undergr_logo14.png"> -->
+                    <canvas id="temp-graph" class="graph">
+                        <!-- Graph: Temp, Feels like, Dew Point -->
+                    </canvas>
+                    <canvas id="count-graph" class="graph">
+                        <!-- Graph: Windspeed, Percipitation -->
+                    </canvas>
+                    <canvas id="reltv-graph" class="graph">
+                        <!-- Graph: Humidity, Pressure -->
+                    </canvas>
+                    <div>
+                        Symbols: Sun/Moon Times
+                    </div>
                 </td>
             </tr>
         </table>
