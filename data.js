@@ -1,5 +1,12 @@
+
+const latitude = 39.6807;
+const longitude = -75.7528;
+
+
+
+
 async function getCurrentWeather(prompt,message){
-    const url = 'https://api.weather.gov/points/39.6807,-75.7528';
+    const url = `https://api.weather.gov/points/${latitude},${longitude}`;
     try{
         const gridFetch = await fetch(url);
         const gridData = await gridFetch.json();
@@ -17,7 +24,7 @@ async function getCurrentWeather(prompt,message){
 }
 
 async function getOldWeather(prompt,message){
-    const url = 'https://api.weather.gov/points/39.6807,-75.7528'
+    const url = `https://api.weather.gov/points/${latitude},${longitude}`
     try{
         //turn user's lat/long into grid coordinate
         const gridFetch = await fetch(url)
@@ -42,14 +49,42 @@ async function getOldWeather(prompt,message){
         const stationObervation = await fetch(stationObservationUrl)
         const stationObservationData = await stationObervation.json()
 
-        //get most recent observation
-        const stationObservationDataMostRecent = stationObservationData.features[0]
-        return stationObservationDataMostRecent;
+        //get recent observations
+        const stationObservationDataRecent = stationObservationData.features
+        return stationObservationDataRecent;
 
     }catch(error){
         console.error('Error:', error)
     }
 }
-Promise.resolve(getOldWeather()).then(
-    body=>console.log(body)
-)
+ Promise.resolve(getOldWeather()).then(
+     body=>console.log(body)
+ )
+
+ // Get List of Weather Data
+
+async function getData() {
+    const raw = await getOldWeather();
+
+    return raw.map((v)=>({
+//        time: v.,
+        temp: v.properties.temperature.value,
+        heatIndex: v.properties.heatIndex.value,
+        precipitation: v.properties.precipitationLastHour.value,
+        windSpeed: v.properties.windSpeed.value, 
+        windDirection: v.properties.windDirection.value,
+        relativeHumidity: v.properties.relativeHumidity.value,
+        dewPoint: v.properties.dewpoint.value,
+        pressure: v.properties.barometricPressure.value,
+        visibility: v.properties.visibility.value,
+    }))
+
+    // return {
+    //     datapoints: [
+    //         {
+    //             time: 0,
+    //             temp: 0
+    //         }
+    //     ]
+    // };
+}
