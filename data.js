@@ -35,6 +35,9 @@ async function getCurrentWeather(prompt,message){
 }
 
 async function getOldWeather(prompt,message){
+    //Returns array of observations of the weather
+    //Each observation is a messy object, the data is in a properties field
+
     const url = `https://api.weather.gov/points/${latitude},${longitude}`
     try{
         //turn user's lat/long into grid coordinate
@@ -56,13 +59,13 @@ async function getOldWeather(prompt,message){
         */
         
         //get all observations of the closest station
-        const stationObservationUrl = `${stationUrl}/observations`
-        const stationObervation = await fetch(stationObservationUrl)
-        const stationObservationData = await stationObervation.json()
+        const stationObservationsUrl = `${stationUrl}/observations`
+        const stationObervations = await fetch(stationObservationsUrl)
+        const stationObservationsData = await stationObervations.json()
 
         //get recent observations
-        const stationObservationDataRecent = stationObservationData.features
-        return stationObservationDataRecent;
+        const stationObservationsDataList = stationObservationsData.features
+        return stationObservationsDataList;
 
     }catch(error){
         console.error('Error:', error)
@@ -82,17 +85,17 @@ async function getData() {
         time: Date.parse(v.id.slice(51,76)),
         temp: v.properties.temperature.value,
         heatIndex: v.properties.heatIndex.value,
-        precipitation: v.properties.precipitationLastHour.value,
-        windSpeed: v.properties.windSpeed.value, 
+        precip: v.properties.precipitationLastHour.value,
+        wind: v.properties.windSpeed.value, 
         windDirection: v.properties.windDirection.value,
-        relativeHumidity: v.properties.relativeHumidity.value,
-        dewPoint: v.properties.dewpoint.value,
-        pressure: v.properties.barometricPressure.value,
-        visibility: v.properties.visibility.value,
+        humid: v.properties.relativeHumidity.value,
+        dewPt: v.properties.dewpoint.value,
+        press: v.properties.barometricPressure.value,
+        visib: v.properties.visibility.value,
     }))
 }
 
-// async function getDaily() {
+//async function getDaily() {
 
-// }
+//}
 
