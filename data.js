@@ -34,7 +34,7 @@ async function getCurrentWeather(prompt,message){
 
 }
 
-async function getOldWeather(prompt,message){
+async function getAllWeather(prompt,message){
     //Returns array of observations of the weather
     //Each observation is a messy object, the data is in a properties field
 
@@ -71,7 +71,7 @@ async function getOldWeather(prompt,message){
         console.error('Error:', error)
     }
 }
-Promise.resolve(getOldWeather()).then(
+Promise.resolve(getAllWeather()).then(
     body=>console.log(body)
 )
 
@@ -79,9 +79,30 @@ Promise.resolve(getOldWeather()).then(
 // Get list of weather data from each observation
 
 async function getData() {
-    const raw = await getOldWeather();
+    //returns ALLLLL the data we want from the observations (Plural!)
+    
+    //gets the weather from (roughly) the past week
+    //needs to be in the function call so we don't lose it
+    const raw = await getAllWeather();
+    
+    //empty array for the observations which are near midnight
+    let newObservations = [];
+    
+    //this section is for getting daily stuff (of which we have only two)
+    //set currentDay as today
+    //grab the first observation in the array which doesn't have the same day as previous
+    //add it to newObservations, change currentDay to its day
+    let currentDay = Date().slice(8,10);
+    for(let i=0;i<raw.length;i++){
+        if(currentDay!==raw[i].id.slice(59,61)){
+            newObservations.push(raw[i]);
+            currentDay=raw[i].id.slice(59,61);
+        }
+    };
 
-    return raw.map((v)=>({
+    return {datapoints:(raw.map((v)=>({
+        //datapoints points. some names have been changed,
+        //but otherwise mostly untouched from Michael's work
         time: Date.parse(v.id.slice(51,76)),
         temp: v.properties.temperature.value,
         heatIndex: v.properties.heatIndex.value,
@@ -92,10 +113,13 @@ async function getData() {
         dewPt: v.properties.dewpoint.value,
         press: v.properties.barometricPressure.value,
         visib: v.properties.visibility.value,
-    }))
+    }))),
+    //dailies values. maps from newObservations, gets just highs and lows
+    //we COULD do precipitation, but it's in 6 hour segments, so we'd need to make another observations array
+    dailies:(newObservations.map((v)=>({
+        high:v.properties.maxTemperatureLast24Hours,
+        low:v.properties.minTemperatureLast24Hours,
+    })))
+    }   
 }
-
-//async function getDaily() {
-
-//}
 
