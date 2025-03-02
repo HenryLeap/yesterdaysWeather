@@ -68,6 +68,14 @@ function toggle(what) {
 
 // General method for making a graph
 function graph(series, chartName) {
+    const cookies = getCookies();
+    let date = new Date();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    date.setDate(date.getDate() - cookies.days);
+
     return new Chart(chartName, {
         type: "scatter",
         data: {
@@ -83,7 +91,7 @@ function graph(series, chartName) {
             legend: {position: "bottom"},
             scales: {
                 // yAxes: [{ticks: {min: Math.min(...ys), max: Math.max(...ys)}}],
-                // xAxes: [{ticks: {min: Math.min(...xs), max: Math.max(...xs)}}],
+                xAxes: [{ticks: {min: decimalDate(date)/* , max: Math.max(...xs) */}}],
             }
         }
     });      
@@ -103,19 +111,40 @@ function tempGraph(data) {
     let series = [];
     cookie.temp && series.push({
         label: "Temperature",
-        data: data.map((v, i) => ({x: i, y: v.temp})),
+        data: data.map((v) => ({x: decimalDate(v.time), y: v.temp})),
         borderColor: "#d5202a"
     });
     // cookie.feel && series.push({
     //     label: "Feels Like",
-    //     data: data.map((v, i) => ({x: i, y: v.feel}))
+    //     data: data.map((v) => ({x: decimalDate(v.time), y: v.feel}))
     // borderColor: "#ac54a0"
     // });
     cookie.dewpt && series.push({
         label: "Dew Point",
-        data: data.map((v, i) => ({x: i, y: v.dewPoint})),
+        data: data.map((v) => ({x: decimalDate(v.time), y: v.dewPt})),
         borderColor: "#5b9f49"
     });
 
     graph(series, "temp-graph")
+}
+
+// Gets the decimal days since midnight from millis dates
+function decimalDate(datenum) {
+    const date = new Date(datenum - midnight());
+    return (
+        date.getDate() +
+        date.getHours() / 24 +
+        date.getMinutes() / 1440
+    ) - 31;
+}
+
+// Gets millis date of next UTC midnight
+function midnight() {
+    let date = new Date();
+    date.setUTCHours(0);
+    date.setUTCMinutes(0);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+    date.setUTCDate(date.getUTCDate() + 1);
+    return +date;
 }
