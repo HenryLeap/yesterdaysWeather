@@ -99,7 +99,11 @@ function graph(series, chartName, ymin, ymax, yAxisIDs) {
                         ticks: {},
                     }
                 ].filter((v) => (yAxisIDs.includes(v.id))),
-                xAxes: [{ticks: {min: decimalDate(date)/* , max: Math.max(...xs) */}}],
+                xAxes: [{ticks: {
+                    min: decimalDate(date),
+                    /*max: Math.max(...xs),*/
+                    stepSize: [0,.2,.5,.5,.5,1,1,1,1][cookies.days]
+                }}],
             }
         }
     });      

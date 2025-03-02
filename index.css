@@ -1,6 +1,6 @@
 .graph {
-    height: 25vh;
-    max-height: 25vh;
+    height: 20vh;
+    max-height: 20vh;
 }
 
 table {
@@ -11,7 +11,7 @@ button {
     width: 18vw;
     height: 5vh;
     background-color: white;
-    font-size: large;
+    font-size: medium;
 }
 
 .side {
