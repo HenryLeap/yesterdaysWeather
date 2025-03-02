@@ -68,18 +68,18 @@ async function getOldWeather(prompt,message){
         console.error('Error:', error)
     }
 }
- Promise.resolve(getOldWeather()).then(
-     body=>console.log(body)
- )
+Promise.resolve(getOldWeather()).then(
+    body=>console.log(body)
+)
 
- // Get list of weather data from each observation
+
+// Get list of weather data from each observation
 
 async function getData() {
     const raw = await getOldWeather();
 
     return raw.map((v)=>({
-        date: v.id.slice(51,61),
-        time: v.id.slice(62,70),
+        time: Date.parse(v.id.slice(51,76)),
         temp: v.properties.temperature.value,
         heatIndex: v.properties.heatIndex.value,
         precipitation: v.properties.precipitationLastHour.value,
