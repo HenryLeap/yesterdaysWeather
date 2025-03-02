@@ -30,6 +30,7 @@ function updateState(cookie) {
     cookie.days === 1 ? document.getElementById("1-day").setAttribute("disabled", "") : document.getElementById("1-day").removeAttribute("disabled");
     cookie.days === 3 ? document.getElementById("3-day").setAttribute("disabled", "") : document.getElementById("3-day").removeAttribute("disabled");
     cookie.days === 7 ? document.getElementById("7-day").setAttribute("disabled", "") : document.getElementById("7-day").removeAttribute("disabled");
+    allGraphs(cookie);
 }
 
 function askCookies(cookies) {
@@ -85,9 +86,22 @@ function graph(xs, ys, chartName, seriesName, colour) {
         options: {
             legend: {position: "bottom"},
             scales: {
-                yAxes: [{ticks: {min: 6, max: 16}}],
-                xAxes: [{ticks: {min: 50, max: 150}}]
+                // yAxes: [{ticks: {min: Math.min(...ys), max: Math.max(...ys)}}],
+                // xAxes: [{ticks: {min: Math.min(...xs), max: Math.max(...xs)}}],
             }
         }
     });      
+}
+
+async function allGraphs(cookie) {
+    const data = await getData();
+
+    cookie.temp && tempGraph(data);
+}
+
+function tempGraph(data) {
+    graph(
+        data.map((_,i) => (-i)), data.map((v) => (v.temp)),
+        "temp-graph", "Temperature", "#d5202a"
+    )
 }
