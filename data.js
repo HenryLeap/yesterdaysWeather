@@ -86,7 +86,7 @@ async function getData() {
     const raw = await getAllWeather();
     
     //empty array for the observations which are near midnight
-    let newObservations = [];
+    let dailyObservations = [raw[0]];
     
     //this section is for getting daily stuff (of which we have only two)
     //set currentDay as today
@@ -95,31 +95,35 @@ async function getData() {
     let currentDay = Date().slice(8,10);
     for(let i=0;i<raw.length;i++){
         if(currentDay!==raw[i].id.slice(59,61)){
-            newObservations.push(raw[i]);
+            dailyObservations.push(raw[i]);
             currentDay=raw[i].id.slice(59,61);
         }
     };
 
-    return {datapoints:(raw.map((v)=>({
-        //datapoints points. some names have been changed,
-        //but otherwise mostly untouched from Michael's work
-        time: Date.parse(v.id.slice(51,76)),
-        temp: parseFloat(v.properties.temperature.value),
+    //datapoints points. some names have been changed,
+    //but otherwise mostly untouched from Michael's work
+    const datapoints = raw.map((v) => ({
+        time:   Date.parse(v.id.slice(51,76)),
+        temp:   parseFloat(v.properties.temperature.value),
         heatIndex: parseFloat(v.properties.heatIndex.value),
         precip: parseFloat(v.properties.precipitationLastHour.value),
-        wind: parseFloat(v.properties.windSpeed.value), 
-        windDirection: parseFloat(v.properties.windDirection.value),
-        humid: parseFloat(v.properties.relativeHumidity.value),
-        dewPt: parseFloat(v.properties.dewpoint.value),
-        press: parseFloat(v.properties.barometricPressure.value) / 100,
-        visib: parseFloat(v.properties.visibility.value) / 1000,
-    }))),
+        wind:   parseFloat(v.properties.windSpeed.value), 
+        // windDirection: parseFloat(v.properties.windDirection.value),
+        humid:  parseFloat(v.properties.relativeHumidity.value),
+        dewPt:  parseFloat(v.properties.dewpoint.value),
+        press:  parseFloat(v.properties.barometricPressure.value) / 100,
+        visib:  parseFloat(v.properties.visibility.value) / 1000,
+    }));
+
     //dailies values. maps from newObservations, gets just highs and lows
     //we COULD do precipitation, but it's in 6 hour segments, so we'd need to make another observations array
-    dailies:(newObservations.map((v)=>({
-        high:v.properties.maxTemperatureLast24Hours,
-        low:v.properties.minTemperatureLast24Hours,
-    })))
-    }   
-}
+    const dailies = dailyObservations.map((v) => ({
+        high: v.properties.maxTemperatureLast24Hours,
+        low:  v.properties.minTemperatureLast24Hours,
+    }));
 
+    return {
+        datapoints,
+        dailies
+    }
+}
