@@ -61,27 +61,26 @@ function toggle(what) {
     updateState(cookie);
 }
 
-function myGraph() {
-    return graph(
-        [50,60,70,80,90,100,110,120,130,140,150],
-        [7,8,8,9,9,9,10,11,14,14,15],
-        "temp-graph", "test", "#d5202a"
-    )
-}
-
-function graph(xs, ys, chartName, seriesName, colour) {
+function graph(series, chartName) {
     return new Chart(chartName, {
         type: "scatter",
         data: {
-            datasets: [{
-                label: seriesName,
+            datasets: series.map((v) => ({
+                ...v,
                 fill: false,
                 lineTension: .3,
                 showLine: true,
-                pointRadius: 0,
-                borderColor: colour,
-                data: xs.map((v, i) => ({x:v, y:ys[i]}))
-            }]
+                pointRadius: 0
+            }))
+            // [{
+            //     label: seriesName,
+            //     fill: false,
+            //     lineTension: .3,
+            //     showLine: true,
+            //     pointRadius: 0,
+            //     borderColor: colour,
+            //     data: xs.map((v, i) => ({x:v, y:ys[i]}))
+            // }]
         },
         options: {
             legend: {position: "bottom"},
@@ -96,12 +95,28 @@ function graph(xs, ys, chartName, seriesName, colour) {
 async function allGraphs(cookie) {
     const data = await getData();
 
-    cookie.temp && tempGraph(data);
+    tempGraph(data);
 }
 
 function tempGraph(data) {
-    graph(
-        data.map((_,i) => (-i)), data.map((v) => (v.temp)),
-        "temp-graph", "Temperature", "#d5202a"
-    )
+    const cookie = getCookies();
+
+    let series = [];
+    cookie.temp && series.push({
+        label: "Temperature",
+        data: data.map((v, i) => ({x: i, y: v.temp})),
+        borderColor: "#d5202a"
+    });
+    // cookie.feel && series.push({
+    //     label: "Feels Like",
+    //     data: data.map((v, i) => ({x: i, y: v.feel}))
+    // borderColor: "#ac54a0"
+    // });
+    cookie.dewpt && series.push({
+        label: "Dew Point",
+        data: data.map((v, i) => ({x: i, y: v.dewPoint})),
+        borderColor: "#5b9f49"
+    });
+
+    graph(series, "temp-graph")
 }
