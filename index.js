@@ -129,11 +129,11 @@ function tempGraph(data) {
         data: data.map((v) => ({x: decimalDate(v.time), y: cookies.metric ? v.temp : C2F(v.temp)})),
         borderColor: "#d5202a"
     });
-    // cookies.feel && series.push({
-    //     label: `Feels Like (°${cookies.metric ? "C" : "F"})`,
-    //     data: data.map((v) => ({x: decimalDate(v.time), y: cookies.metric ? v.feel : C2F(v.feel)}))
-    // borderColor: "#ac54a0"
-    // });
+    cookies.feel && series.push({
+        label: `Feels Like (°${cookies.metric ? "C" : "F"})`,
+        data: data.map((v) => ({x: decimalDate(v.time), y: cookies.metric ? v.feel : C2F(v.feel)})),
+        borderColor: "#ac54a0"
+    });
     cookies.dewpt && series.push({
         label: `Dew Point (°${cookies.metric ? "C" : "F"})`,
         data: data.map((v) => ({x: decimalDate(v.time), y: cookies.metric ? v.dewPt : C2F(v.dewPt)})),

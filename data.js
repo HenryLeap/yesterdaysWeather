@@ -11,7 +11,7 @@ function getLocation() {
         console.log(`Your latitude is ${latitude} and longitude is ${longitude}`);
     }
 }
-getLocation();
+// getLocation();
 
 
 
@@ -71,9 +71,9 @@ async function getAllWeather(prompt,message){
         console.error('Error:', error)
     }
 }
-Promise.resolve(getAllWeather()).then(
-    body=>console.log(body)
-)
+// Promise.resolve(getAllWeather()).then(
+//     body=>console.log(body)
+// )
 
 
 // Get list of weather data from each observation
@@ -105,7 +105,7 @@ async function getData() {
     const datapoints = raw.map((v) => ({
         time:   Date.parse(v.id.slice(51,76)),
         temp:   parseFloat(v.properties.temperature.value),
-        heatIndex: parseFloat(v.properties.heatIndex.value),
+        // heatIndex: parseFloat(v.properties.heatIndex.value),
         precip: parseFloat(v.properties.precipitationLastHour.value),
         wind:   parseFloat(v.properties.windSpeed.value), 
         // windDirection: parseFloat(v.properties.windDirection.value),
@@ -113,6 +113,9 @@ async function getData() {
         dewPt:  parseFloat(v.properties.dewpoint.value),
         press:  parseFloat(v.properties.barometricPressure.value) / 100,
         visib:  parseFloat(v.properties.visibility.value) / 1000,
+    })).map((v) => ({
+        ...v,
+        feel: apparentTemp(v.temp, v.humid, v.wind)
     }));
 
     //dailies values. maps from newObservations, gets just highs and lows
@@ -126,4 +129,11 @@ async function getData() {
         datapoints,
         dailies
     }
+}
+
+// Get the apparent temperature given dry bulb, humidity, and wind speed
+// https://code.adonline.id.au/calculating-feels-like-temperatures/
+function apparentTemp(temp, humid, wind) {
+    const rho = humid/100 * 6.105 * Math.exp(17.27 * temp / (237.7+temp));
+    return temp + 0.33*rho - 0.7*wind - 4;
 }
