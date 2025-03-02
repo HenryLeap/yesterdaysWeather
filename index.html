@@ -9,7 +9,7 @@
     <body>
         <table>
             <tr>
-                <td>Toggles</td>
+                <td></td>
                 <td>
                     <button id="1-day" onclick="changeDays(1)">1 Day</button>
                     <button id="3-day" onclick="changeDays(3)">3 Days</button>
@@ -19,18 +19,16 @@
             </tr>
             <tr>
                 <td>
-                    <button onclick="toggle('temp')">Temperature</button><br>
-                    <button onclick="toggle('feel')">Feels Like</button><br>
-                    <button onclick="toggle('wind')">Windspeed</button><br>
-                    <button onclick="toggle('percip')">Percipitation</button><br> 
-                    <button onclick="toggle('humid')">Humidity</button><br>
-                    <button onclick="toggle('dewpt')">Dew Point</button><br>
-                    <button onclick="toggle('press')">Pressure</button><br>
-                    <button onclick="toggle('visib')">Visibility</button><br>
+                    <button onclick="toggle('temp')"   class="side" style="color: #d5202a">Temperature</button><br>
+                    <button onclick="toggle('feel')"   class="side" style="color: #ac54a0">Feels Like</button><br>
+                    <button onclick="toggle('wind')"   class="side" style="color: #0053ae">Windspeed</button><br>
+                    <button onclick="toggle('percip')" class="side" style="color: #15aadc">Percipitation</button><br> 
+                    <button onclick="toggle('humid')"  class="side" style="color: #87c404">Humidity</button><br>
+                    <button onclick="toggle('dewpt')"  class="side" style="color: #5b9f49">Dew Point</button><br>
+                    <button onclick="toggle('press')"  class="side" style="color: #1e2023">Pressure</button><br>
+                    <button onclick="toggle('visib')"  class="side" style="color: #a3a3a3">Visibility</button><br>
                 </td>
                 <td>
-                    <div>Warnings</div>
-                    <!-- <img src="https://upload.wikimedia.org/wikipedia/en/0/0f/Weath_undergr_logo14.png"> -->
                     <canvas id="temp-graph" class="graph">
                         <!-- Graph: Temp, Feels like, Dew Point -->
                     </canvas>
@@ -42,10 +40,10 @@
                     </canvas>
                     <div>
                         <h3>Summary data</h3>
-                        <table>
-                            <th><td></td><td>Last 24 Hours</td><td>Period</td></th>
-                            <tr><td>min/max</td><td></td><td></td></tr>
-                            <tr><td>gain/loss</td><td></td><td></td></tr>
+                        <table style="text-align: center;">
+                            <tr><th></th><th>Last 24 Hours</th><th>Period</th></tr>
+                            <tr><th>min/max  </th><td id="mm24"></td><td id="mmP"></td></tr>
+                            <tr><th>gain/loss</th><td id="gl24"></td><td id="glP"></td></tr>
                         </table>
                     </div>
                 </td>
