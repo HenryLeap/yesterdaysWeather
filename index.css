@@ -1,4 +1,19 @@
 .graph {
-    height: 28vh;
-    max-height: 28vh;
+    height: 25vh;
+    max-height: 25vh;
+}
+
+table {
+    width: 100%;
+}
+
+button {
+    width: 18vw;
+    height: 5vh;
+    background-color: white;
+    font-size: large;
+}
+
+.side {
+    margin: 2.5vh 0;
 }
