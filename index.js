@@ -68,7 +68,7 @@ function toggle(what) {
 }
 
 // General method for making a graph
-function graph(series, chartName, ymin, gridcount) {
+function graph(series, chartName, ymin, ymax, yAxisIDs) {
     const cookies = getCookies();
     let date = new Date();
     date.setHours(0);
@@ -77,21 +77,7 @@ function graph(series, chartName, ymin, gridcount) {
     date.setMilliseconds(0);
     date.setDate(date.getDate() - cookies.days);
 
-    let yAxes = [
-        {
-            "id" : "y",
-            type: "linear",
-            ticks: {min: ymin/* , max: Math.max(...ys) */}
-        },
-    ];
-    gridcount > 1 && yAxes.push(
-        {
-            "id" : "y2",
-            type: "linear",
-            position: "right",
-            ticks: {},
-        }
-    );
+    yAxisIDs ??= ["y"];
 
     return new Chart(chartName, {
         type: "scatter",
@@ -107,7 +93,19 @@ function graph(series, chartName, ymin, gridcount) {
         options: {
             legend: {position: "bottom"},
             scales: {
-                yAxes,
+                yAxes: [
+                    {
+                        "id" : "y",
+                        type: "linear",
+                        ticks: {min: ymin, max: ymax}
+                    },
+                    {
+                        "id" : "y2",
+                        type: "linear",
+                        position: "right",
+                        ticks: {},
+                    }
+                ].filter((v) => (yAxisIDs.includes(v.id))),
                 xAxes: [{ticks: {min: decimalDate(date)/* , max: Math.max(...xs) */}}],
             }
         }
@@ -189,7 +187,7 @@ function reltvGraph(data) {
         yAxisID: "y2"
     });
 
-    graph(series, "reltv-graph", 0, 2)
+    graph(series, "reltv-graph", 0,100, series.map((v) => (v.yAxisID)))
 }
 
 // Gets the decimal days since midnight from millis dates
