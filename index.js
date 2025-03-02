@@ -198,9 +198,9 @@ function summaryData(dailies, datapoints) {
     let max = datapoints[24].temp;
     for (let i = 1; i < datapoints.length; i++) {
         if (datapoints[i].time > nDaysAgoMidnight(0) || datapoints[i].time < nDaysAgoMidnight(cookies.days)) continue;
-        datapoints[i].temp > datapoints[i-1].temp ?
-            up   += datapoints[i].temp - datapoints[i-1].temp
-        :   down += datapoints[i-1].temp - datapoints[i].temp;
+        datapoints[i].temp < datapoints[i-1].temp ?
+            up   += datapoints[i-1].temp - datapoints[i].temp
+        :   down += datapoints[i].temp - datapoints[i-1].temp;
         min = Math.min(min, datapoints[i].temp);
         max = Math.max(max, datapoints[i].temp);
     }
@@ -213,16 +213,14 @@ function summaryData(dailies, datapoints) {
     max = datapoints[0].temp;
     for (let i = 1; i < datapoints.length; i++) {
         if (new Date() - datapoints[i].time > 1000*60*60*24) break;
-        datapoints[i].temp > datapoints[i-1].temp ?
-            up   += datapoints[i].temp - datapoints[i-1].temp
-        :   down += datapoints[i-1].temp - datapoints[i].temp;
+        datapoints[i].temp < datapoints[i-1].temp ?
+            up   += datapoints[i-1].temp - datapoints[i].temp
+        :   down += datapoints[i].temp - datapoints[i-1].temp;
         min = Math.min(min, datapoints[i].temp);
         max = Math.max(max, datapoints[i].temp);
     }
     document.getElementById("gl24").innerText = (cookies.metric ? `${rnd(up)}/${rnd(down)} °C` : `${rnd(C2F(up))}/${rnd(C2F(down))} °F`);
     document.getElementById("mm24").innerText = (cookies.metric ? `${rnd(min)}/${rnd(max)} °C` : `${rnd(C2F(min))}/${rnd(C2F(max))} °F`);
-
-    console.log(dailies)
 }
 
 // Gets the date for midnight n days ago
