@@ -2,10 +2,27 @@
 <html>
     <head>
         <script type="text/javascript" src="./data.js"></script>
+        <script>
+            function getLocation() {
+                navigator.geolocation.getCurrentPosition(successFunction);
+                function successFunction(position) {
+                    latitude = position.coords.latitude;
+                    document.getElementById("latitude").innerHTML = latitude;
+                    longitude = position.coords.longitude;
+                    document.getElementById("longitude").innerHTML = longitude;
+                }
+            }
+          </script>
     </head>
     <body>
         <script>
             getOldWeather().then((ret) => {console.log(ret)})
         </script>
+    </body>
+    <body onload="getLocation()">
+
+        <h3>Latitude is:  <span id="latitude"></span></h3>
+        <h3>Longitude is:  <span id="longitude"></span></h3>
+      
     </body>
 </html>

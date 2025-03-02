@@ -1,6 +1,19 @@
 
-const latitude = 39.6807;
-const longitude = -75.7528;
+var latitude = 39.6807;
+var longitude = -75.7528;
+
+
+function getLocation() {
+    navigator.geolocation.getCurrentPosition(successFunction);
+    function successFunction(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        console.log(`Your latitude is ${latitude} and longitude is ${longitude}`);
+    }
+}
+getLocation();
+
+
 
 
 async function getCurrentWeather(prompt,message){
@@ -77,11 +90,9 @@ async function getData() {
         pressure: v.properties.barometricPressure.value,
         visibility: v.properties.visibility.value,
     }))
-    //     datapoints: [
-    //         {
-    //             time: 0,
-    //             temp: 0
-    //         }
-    //     ]
-    // };
 }
+
+// async function getDaily() {
+
+// }
+
