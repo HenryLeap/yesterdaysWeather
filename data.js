@@ -3,8 +3,6 @@ const latitude = 39.6807;
 const longitude = -75.7528;
 
 
-
-
 async function getCurrentWeather(prompt,message){
     const url = `https://api.weather.gov/points/${latitude},${longitude}`;
     try{
@@ -61,13 +59,14 @@ async function getOldWeather(prompt,message){
      body=>console.log(body)
  )
 
- // Get List of Weather Data
+ // Get list of weather data from each observation
 
 async function getData() {
     const raw = await getOldWeather();
 
     return raw.map((v)=>({
-//        time: v.,
+        date: v.id.slice(51,61),
+        time: v.id.slice(62,70),
         temp: v.properties.temperature.value,
         heatIndex: v.properties.heatIndex.value,
         precipitation: v.properties.precipitationLastHour.value,
@@ -78,8 +77,6 @@ async function getData() {
         pressure: v.properties.barometricPressure.value,
         visibility: v.properties.visibility.value,
     }))
-
-    // return {
     //     datapoints: [
     //         {
     //             time: 0,
