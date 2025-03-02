@@ -1,14 +1,13 @@
-
-var latitude = 39.6807;
-var longitude = -75.7528;
-
+var latitude = 39;
+var longitude = -95.7528;
 
 function getLocation() {
     navigator.geolocation.getCurrentPosition(successFunction);
     function successFunction(position) {
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
-        console.log(`Your latitude is ${latitude} and longitude is ${longitude}`);
+        // console.log(`Your latitude is ${latitude} and longitude is ${longitude}`);
+        pageLoad();
     }
 }
 // getLocation();
