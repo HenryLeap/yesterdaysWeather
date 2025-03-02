@@ -101,7 +101,7 @@ function graph(series, chartName) {
 async function allGraphs() {
     const data = await getData();
 
-    tempGraph(data);
+    tempGraph(data.datapoints);
 }
 
 // Makes the first graph
