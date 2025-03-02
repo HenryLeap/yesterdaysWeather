@@ -27,8 +27,6 @@
                     <button onclick="toggle('dewpt')">Dew Point</button><br>
                     <button onclick="toggle('press')">Pressure</button><br>
                     <button onclick="toggle('visib')">Visibility</button><br>
-                    <button onclick="toggle('sun')">Sun Times</button><br>
-                    <button onclick="toggle('moon')">Moon Times</button>
                 </td>
                 <td>
                     <div>Warnings</div>
@@ -43,7 +41,12 @@
                         <!-- Graph: Humidity, Pressure -->
                     </canvas>
                     <div>
-                        Symbols: Sun/Moon Times
+                        <h3>Summary data</h3>
+                        <table>
+                            <th><td></td><td>Last 24 Hours</td><td>Period</td></th>
+                            <tr><td>min/max</td><td></td><td></td></tr>
+                            <tr><td>gain/loss</td><td></td><td></td></tr>
+                        </table>
                     </div>
                 </td>
             </tr>

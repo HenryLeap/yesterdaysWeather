@@ -23,8 +23,6 @@ function getCookies() {
     cookie.dewpt ??= false;
     cookie.press ??= false;
     cookie.visib ??= false;
-    cookie.sun ??= true;
-    cookie.moon ??= false;
     return cookie;
 }
 
