@@ -1,15 +1,18 @@
+// Used when cookies are declined
 var globalNotCookies = {};
 
+// Gets cookies, unless declined then from globalNotCookies
 function getCookies() {
     let cookie = {};
-    try {
-        cookie = JSON.parse(document.cookie);
-    }
+    // Tries to parse the cookies, if fails (because empty oder was) stays as {}
+    try { cookie = JSON.parse(document.cookie); }
     catch {}
     cookie.allowed ??= false;
 
+    // Use globalNotCookies if not allowed.  Also shallow copy whatever we're using
     cookie = {...(cookie.allowed ? cookie : globalNotCookies)};
 
+    // Replace undefindes with defaults
     cookie.metric ??= false;
     cookie.days ??= 1;
     cookie.temp ??= true;
@@ -24,43 +27,46 @@ function getCookies() {
     return cookie;
 }
 
+// General update function
 function updateState(cookie) {
-    (cookie.allowed ? document.cookie  = JSON.stringify(cookie): globalNotCookies = {...cookie});
+    // Update cookies or globalNotCookies
+    (cookie.allowed ? document.cookie = JSON.stringify(cookie) : globalNotCookies = {...cookie});
+    // Update text and visibility of top buttons
     document.getElementById("units").innerText = cookie.metric ? "US Standard" : "Metric";
     cookie.days === 1 ? document.getElementById("1-day").setAttribute("disabled", "") : document.getElementById("1-day").removeAttribute("disabled");
     cookie.days === 3 ? document.getElementById("3-day").setAttribute("disabled", "") : document.getElementById("3-day").removeAttribute("disabled");
     cookie.days === 7 ? document.getElementById("7-day").setAttribute("disabled", "") : document.getElementById("7-day").removeAttribute("disabled");
-    allGraphs(cookie);
+
+    // Draw all of the graphs
+    allGraphs();
 }
 
 function askCookies(cookies) {
     cookies.allowed = confirm("Allow cookies?");
 }
 
+// Run on page load, check about cookies, sets the state
 function pageLoad() {
     const cookies = getCookies();
     if (!cookies.allowed) askCookies(cookies);
     updateState(cookies);
 }
 
-// function changeUnits() {
-//     const cookie = getCookies();
-//     cookie.metric = !cookie.metric;
-//     updateState(cookie);
-// }
-
+// Run on click, changes the number of days' data to display
 function changeDays(count) {
     const cookie = getCookies();
     cookie.days = count;
     updateState(cookie);
 }
 
+// Toggles the setting of what
 function toggle(what) {
     const cookie = getCookies();
     cookie.hasOwnProperty(what) && (cookie[what] = !cookie[what]);
     updateState(cookie);
 }
 
+// General method for making a graph
 function graph(series, chartName) {
     return new Chart(chartName, {
         type: "scatter",
@@ -72,15 +78,6 @@ function graph(series, chartName) {
                 showLine: true,
                 pointRadius: 0
             }))
-            // [{
-            //     label: seriesName,
-            //     fill: false,
-            //     lineTension: .3,
-            //     showLine: true,
-            //     pointRadius: 0,
-            //     borderColor: colour,
-            //     data: xs.map((v, i) => ({x:v, y:ys[i]}))
-            // }]
         },
         options: {
             legend: {position: "bottom"},
@@ -92,12 +89,14 @@ function graph(series, chartName) {
     });      
 }
 
-async function allGraphs(cookie) {
+// Creates all of the graphs
+async function allGraphs() {
     const data = await getData();
 
     tempGraph(data);
 }
 
+// Makes the first graph
 function tempGraph(data) {
     const cookie = getCookies();
 
