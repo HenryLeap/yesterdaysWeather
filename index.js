@@ -36,8 +36,8 @@ function updateState(cookie) {
     cookie.days === 3 ? document.getElementById("3-day").setAttribute("disabled", "") : document.getElementById("3-day").removeAttribute("disabled");
     cookie.days === 7 ? document.getElementById("7-day").setAttribute("disabled", "") : document.getElementById("7-day").removeAttribute("disabled");
 
-    // Draw all of the graphs
-    allGraphs();
+    // Draw all of the graphs and summary data
+    allData();
 }
 
 function askCookies(cookies) {
@@ -68,12 +68,7 @@ function toggle(what) {
 // General method for making a graph
 function graph(series, chartName, ymin, ymax, yAxisIDs) {
     const cookies = getCookies();
-    let date = new Date();
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    date.setDate(date.getDate() - cookies.days);
+    let date = nDaysAgoMidnight(cookies.days);
 
     yAxisIDs ??= ["y"];
 
@@ -110,13 +105,15 @@ function graph(series, chartName, ymin, ymax, yAxisIDs) {
     });      
 }
 
-// Creates all of the graphs
-async function allGraphs() {
+// Creates all of the graphs and summary data
+async function allData() {
     const data = await getData();
 
     tempGraph(data.datapoints);
     countGraph(data.datapoints);
     reltvGraph(data.datapoints);
+
+    summaryData(data.dailies, data.datapoints);
 }
 
 // Makes the first graph
@@ -188,6 +185,53 @@ function reltvGraph(data) {
     graph(series, "reltv-graph", 0,100, series.map((v) => (v.yAxisID)))
 }
 
+function summaryData(dailies, datapoints) {
+    const cookies = getCookies();
+
+    let up = 0;
+    let down = 0;
+    let min = datapoints[24].temp;
+    let max = datapoints[24].temp;
+    for (let i = 1; i < datapoints.length; i++) {
+        if (datapoints[i].time > nDaysAgoMidnight(0) || datapoints[i].time < nDaysAgoMidnight(cookies.days)) continue;
+        datapoints[i].temp > datapoints[i-1].temp ?
+            up   += datapoints[i].temp - datapoints[i-1].temp
+        :   down += datapoints[i-1].temp - datapoints[i].temp;
+        min = Math.min(min, datapoints[i].temp);
+        max = Math.max(max, datapoints[i].temp);
+    }
+    document.getElementById("glP").innerText = (cookies.metric ? `${rnd(up)}/${rnd(down)} °C` : `${rnd(C2F(up))}/${rnd(C2F(down))} °F`);
+    document.getElementById("mmP").innerText = (cookies.metric ? `${rnd(min)}/${rnd(max)} °C` : `${rnd(C2F(min))}/${rnd(C2F(max))} °F`);
+
+    up = 0;
+    down = 0;
+    min = datapoints[0].temp;
+    max = datapoints[0].temp;
+    for (let i = 1; i < datapoints.length; i++) {
+        if (new Date() - datapoints[i].time > 1000*60*60*24) break;
+        datapoints[i].temp > datapoints[i-1].temp ?
+            up   += datapoints[i].temp - datapoints[i-1].temp
+        :   down += datapoints[i-1].temp - datapoints[i].temp;
+        min = Math.min(min, datapoints[i].temp);
+        max = Math.max(max, datapoints[i].temp);
+    }
+    document.getElementById("gl24").innerText = (cookies.metric ? `${rnd(up)}/${rnd(down)} °C` : `${rnd(C2F(up))}/${rnd(C2F(down))} °F`);
+    document.getElementById("mm24").innerText = (cookies.metric ? `${rnd(min)}/${rnd(max)} °C` : `${rnd(C2F(min))}/${rnd(C2F(max))} °F`);
+
+    console.log(dailies)
+}
+
+// Gets the date for midnight n days ago
+function nDaysAgoMidnight(n) {
+    let date = new Date();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    date.setDate(date.getDate() - n);
+    return date;
+}
+
 // Gets the decimal days since midnight from millis dates
 function decimalDate(datenum) {
     const date = new Date(datenum - midnight());
@@ -222,4 +266,9 @@ function K2M(val) {
 // Converts millimetres to inches
 function mm2in(val) {
     return val / 25.4;
+}
+
+// Rounds to two decimals
+function rnd(val) {
+    return Math.round(val * 100) / 100;
 }
