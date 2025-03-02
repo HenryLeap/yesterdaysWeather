@@ -38,6 +38,11 @@ function updateState(cookie) {
 
     // Draw all of the graphs and summary data
     allData();
+
+    // Make enabled series' buttons grey
+    for (let button of document.getElementsByClassName("side")) {
+        button.style.backgroundColor = cookie[button.getAttribute("onclick").slice(8,-2)] ? "#ddd" : "#fff";
+    }
 }
 
 function askCookies(cookies) {
